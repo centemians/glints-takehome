@@ -47,15 +47,16 @@ const JobDescription = styled.span`
   margin-top: 12px;
 `;
 
-const ExperienceInfo = () => {
+const ExperienceInfo = ({ experienceData }: any) => {
+  const { jobTitle, companyName, location } = experienceData;
   return (
     <MainContainer>
       <CompanyLogo src="https://media-exp1.licdn.com/dms/image/C4E0BAQG05VHCuyRKZg/company-logo_100_100/0/1600685678299?e=1648684800&v=beta&t=0pPWONi4CS0IFzcOMO3KLZ42xSQlro9z-C7VxFs77pU" />
       <CompanyInformation>
-        <Designation>SDE 3</Designation>
-        <CompanyName>Yellow Class</CompanyName>
+        <Designation>{jobTitle}</Designation>
+        <CompanyName>{companyName}</CompanyName>
         <Duration>Jun 2021 - Present : 7 mos</Duration>
-        <Location>Gurugram, Haryana, India</Location>
+        <Location>{location}</Location>
         <JobDescription>
           At Yellow Class, we provide life skills classes driving engagement and
           learning activities for kids between 2-12 years in a fun-filled way.
