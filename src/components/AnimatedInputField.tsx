@@ -15,7 +15,7 @@ const MainContainer = styled.div`
   margin-bottom: 20px;
 `;
 
-const InputLabel = styled.span`
+export const InputLabel = styled.span`
   font-size: 14px;
   margin-bottom: 5px;
   font-weight: 400;
@@ -47,7 +47,7 @@ const StyledInputField = styled.input.attrs({ autocomplete: "off" })<{
   `
 );
 
-const ErrorMessage = styled.span`
+export const ErrorMessage = styled.span`
   font-size: 14px;
   font-weight: 400;
   color: #cc1016;

@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import ExperienceModal from "./ExperienceModal";
 import db from "../config";
 import firebase from "firebase/compat/app";
+import { months } from "../constants/constant";
 
 const MainContainer = styled.div`
   display: flex;
@@ -63,6 +64,7 @@ const ExperienceContainer = () => {
   useEffect(() => {
     db.collection("experience")
       .where("userId", "==", "123")
+      .orderBy("startDate", "desc")
       .onSnapshot((snapshot) => {
         setExperiences(
           snapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() }))
@@ -98,6 +100,10 @@ const ExperienceContainer = () => {
     db.collection("experience").add({
       ...data,
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      startDate: new Date(
+        data.startDateYear,
+        months.indexOf(data.startDateYear)
+      ),
       userId: "123",
     });
   };

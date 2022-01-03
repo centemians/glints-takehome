@@ -48,19 +48,30 @@ const JobDescription = styled.span`
 `;
 
 const ExperienceInfo = ({ experienceData }: any) => {
-  const { jobTitle, companyName, location } = experienceData;
+  const {
+    jobTitle,
+    companyName,
+    location,
+    startDateMonth,
+    startDateYear,
+    endDateMonth,
+    endDateYear,
+    isCurrentJob,
+    jobDescription,
+  } = experienceData;
   return (
     <MainContainer>
       <CompanyLogo src="https://media-exp1.licdn.com/dms/image/C4E0BAQG05VHCuyRKZg/company-logo_100_100/0/1600685678299?e=1648684800&v=beta&t=0pPWONi4CS0IFzcOMO3KLZ42xSQlro9z-C7VxFs77pU" />
       <CompanyInformation>
         <Designation>{jobTitle}</Designation>
         <CompanyName>{companyName}</CompanyName>
-        <Duration>Jun 2021 - Present : 7 mos</Duration>
+        <Duration>
+          {`${startDateMonth} ${startDateYear} - ${
+            isCurrentJob ? "Present" : `${endDateMonth} ${endDateYear}`
+          }`}
+        </Duration>
         <Location>{location}</Location>
-        <JobDescription>
-          At Yellow Class, we provide life skills classes driving engagement and
-          learning activities for kids between 2-12 years in a fun-filled way.
-        </JobDescription>
+        <JobDescription>{jobDescription}</JobDescription>
       </CompanyInformation>
     </MainContainer>
   );
