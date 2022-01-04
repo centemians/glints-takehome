@@ -70,6 +70,7 @@ const ExperienceContainer = () => {
       todoItem: state.app.todoItem,
       status: state.app.status,
       allTodos: state.app.allTodos,
+      user: state.user.user,
     };
   }, shallowEqual);
 
@@ -108,15 +109,14 @@ const ExperienceContainer = () => {
   }, [data]);
 
   useEffect(() => {
-    let data;
     db.collection("experience")
-      .where("userId", "==", "123")
+      .where("userId", "==", data.user.uid)
       .orderBy("startDate", "desc")
       .get()
-      .then((snapshot) => {
-        data = snapshot.docs.map((doc) => doc.data());
-        console.log("==>>", data);
-        dispatch(syncData(data));
+      .then((snapshot: any) => {
+        const exps = snapshot.docs.map((doc: any) => doc.data());
+        console.log("==>>", exps);
+        dispatch(syncData(exps));
       });
     console.log("data is ====>>>", data);
     // return () => unsubscribe();
@@ -144,17 +144,17 @@ const ExperienceContainer = () => {
     setIsModalActive(false);
   };
 
-  const submitFormHandler = (data: any) => {
+  const submitFormHandler = (formData: any) => {
     // reset();
-    console.log("data is: ", data);
+    console.log("data is: ", formData);
     const newData = {
-      ...data,
+      ...formData,
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
       startDate: new Date(
-        data.startDateYear,
-        months.indexOf(data.startDateMonth)
+        formData.startDateYear,
+        months.indexOf(formData.startDateMonth)
       ),
-      userId: "123",
+      userId: data.user.uid,
     };
 
     dispatch(addTodoOffline(newData));

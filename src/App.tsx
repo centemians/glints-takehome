@@ -1,7 +1,8 @@
 import React from "react";
-import { Provider } from "react-redux";
+import { Provider, shallowEqual, useSelector } from "react-redux";
 import styled from "styled-components";
 import ExperienceContainer from "./components/ExperienceContainer";
+import Login from "./components/Login";
 import ProfileIntro from "./components/ProfileIntro";
 import store from "./redux/store";
 
@@ -12,13 +13,24 @@ const MainContainer = styled.div`
 `;
 
 function App() {
+  const data = useSelector((state: any) => {
+    console.log("state is: ", state);
+    return {
+      user: state.user.user,
+    };
+  }, shallowEqual);
+
   return (
-    <Provider store={store}>
-      <MainContainer>
-        <ProfileIntro />
-        <ExperienceContainer />
-      </MainContainer>
-    </Provider>
+    <>
+      {!data.user ? (
+        <Login />
+      ) : (
+        <MainContainer>
+          <ProfileIntro />
+          <ExperienceContainer />
+        </MainContainer>
+      )}
+    </>
   );
 }
 
