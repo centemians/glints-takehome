@@ -9,6 +9,8 @@ import ExperienceModal from "./ExperienceModal";
 import db from "../config";
 import firebase from "firebase/compat/app";
 import { months } from "../constants/constant";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { addTodoOffline, syncData } from "../redux/actions/app";
 
 const MainContainer = styled.div`
   display: flex;
@@ -60,16 +62,64 @@ const ModalContainer = styled.div`
 const ExperienceContainer = () => {
   const [isModalActive, setIsModalActive] = useState(false);
   const [experiences, setExperiences] = useState([] as any);
+  const dispatch = useDispatch();
+
+  const data = useSelector((state: any) => {
+    console.log("state is: ", state);
+    return {
+      todoItem: state.app.todoItem,
+      status: state.app.status,
+      allTodos: state.app.allTodos,
+    };
+  }, shallowEqual);
 
   useEffect(() => {
+    if (data?.allTodos?.length) {
+      console.log("data ==========>>>>", data.allTodos);
+      let allData = data.allTodos.filter((item: any) => {
+        console.log("item ===", item, item !== null && item !== undefined);
+        return item !== null && item !== undefined;
+      });
+      console.log("all data is: ", allData);
+
+      allData = allData.sort((item1: any, item2: any) => {
+        console.log(
+          "item 1",
+          item1,
+          new Date(item1?.startDate).getTime() >
+            new Date(item2?.startDate).getTime()
+        );
+        if (
+          new Date(item1?.startDate).getTime() >
+          new Date(item2?.startDate).getTime()
+        )
+          return -1;
+        else if (
+          new Date(item1?.startDate).getTime() <
+          new Date(item2?.startDate).getTime()
+        )
+          return 1;
+
+        return 0;
+      });
+      setExperiences(allData);
+      console.log("data is: ===========>>>", allData);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    let data;
     db.collection("experience")
       .where("userId", "==", "123")
       .orderBy("startDate", "desc")
-      .onSnapshot((snapshot) => {
-        setExperiences(
-          snapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() }))
-        );
+      .get()
+      .then((snapshot) => {
+        data = snapshot.docs.map((doc) => doc.data());
+        console.log("==>>", data);
+        dispatch(syncData(data));
       });
+    console.log("data is ====>>>", data);
+    // return () => unsubscribe();
   }, []);
 
   console.log("experience is: ", experiences);
@@ -97,15 +147,26 @@ const ExperienceContainer = () => {
   const submitFormHandler = (data: any) => {
     // reset();
     console.log("data is: ", data);
-    db.collection("experience").add({
+    const newData = {
       ...data,
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
       startDate: new Date(
         data.startDateYear,
-        months.indexOf(data.startDateYear)
+        months.indexOf(data.startDateMonth)
       ),
       userId: "123",
-    });
+    };
+
+    dispatch(addTodoOffline(newData));
+    // db.collection("experience").add({
+    //   ...data,
+    //   timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    //   startDate: new Date(
+    //     data.startDateYear,
+    //     months.indexOf(data.startDateYear)
+    //   ),
+    //   userId: "123",
+    // });
   };
 
   const modal = isModalActive ? (
@@ -130,8 +191,8 @@ const ExperienceContainer = () => {
         experiences.map((experience: any) => {
           return (
             <ExperienceInfo
-              key={experience.id}
-              experienceData={experience.data}
+              key={Math.random().toString(36).substring(2, 7)}
+              experienceData={experience}
             />
           );
         })}
