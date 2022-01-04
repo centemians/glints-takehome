@@ -1,7 +1,6 @@
-export const addTodoOffline = (content: any) => {
-  console.log("content is: ", content);
+export const addExperienceOffline = (content: any) => {
   return {
-    type: "ADD_TODO",
+    type: "ADD_EXPERIENCE",
     payload: {
       content,
     },
@@ -10,8 +9,8 @@ export const addTodoOffline = (content: any) => {
         effect: {
           content,
         },
-        commit: { type: "ADD_TODO", meta: { content } },
-        rollback: { type: "ADD_TODO_ROLLBACK", meta: { content } },
+        commit: { type: "ADD_EXPERIENCE", meta: { content } },
+        rollback: { type: "ADD_EXPERIENCE_ROLLBACK", meta: { content } },
       },
     },
   };
@@ -19,7 +18,7 @@ export const addTodoOffline = (content: any) => {
 
 export const syncData = (content: any) => {
   return {
-    type: "SYNC_TODO",
+    type: "SYNC_EXPERIENCE",
     payload: {
       content,
     },

@@ -1,24 +1,24 @@
 interface TInitialState {
-  todoItem?: any;
+  experience?: any;
   status?: any;
-  allTodos: any;
+  allExperience: any;
 }
 const initialState: TInitialState = {
-  allTodos: [],
+  allExperience: [],
 };
 
 const reducer = (state = initialState, action: any) => {
   switch (action.type) {
-    case "ADD_TODO":
+    case "ADD_EXPERIENCE":
       return (state = {
         ...state,
-        todoItem: action.payload.content,
-        allTodos: [...state.allTodos, action.payload.content],
+        experience: action.payload.content,
+        allExperience: [...state.allExperience, action.payload.content],
       });
-    case "SYNC_TODO":
+    case "SYNC_EXPERIENCE":
       return (state = {
         ...state,
-        allTodos: action.payload.content,
+        allExperience: action.payload.content,
       });
     default:
       return state;

@@ -10,7 +10,7 @@ import db from "../config";
 import firebase from "firebase/compat/app";
 import { months } from "../constants/constant";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { addTodoOffline, syncData } from "../redux/actions/app";
+import { addExperienceOffline, syncData } from "../redux/actions/app";
 
 const MainContainer = styled.div`
   display: flex;
@@ -66,16 +66,14 @@ const ExperienceContainer = () => {
 
   const data = useSelector((state: any) => {
     return {
-      todoItem: state.app.todoItem,
-      status: state.app.status,
-      allTodos: state.app.allTodos,
+      allExperience: state.app.allExperience,
       user: state.user.user,
     };
   }, shallowEqual);
 
   useEffect(() => {
-    if (data?.allTodos?.length) {
-      let allData = data.allTodos.filter((item: any) => {
+    if (data?.allExperience?.length) {
+      let allData = data.allExperience.filter((item: any) => {
         return item !== null && item !== undefined;
       });
 
@@ -138,7 +136,7 @@ const ExperienceContainer = () => {
       userId: data.user.uid,
     };
 
-    dispatch(addTodoOffline(newData));
+    dispatch(addExperienceOffline(newData));
   };
 
   const modal = isModalActive ? (
