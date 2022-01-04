@@ -24,7 +24,6 @@ export const InputLabel = styled.span`
 `;
 
 const StyledInputField = styled.input.attrs({ autocomplete: "off" })<{
-  // error: boolean;
   noBorder?: boolean;
 }>(
   ({ noBorder = false }) => css`
@@ -67,7 +66,6 @@ const AnimatedInputField = React.forwardRef<
   TAnimatedInputFieldProps & ReturnType<UseFormRegister<IFormValues>>
 >(({ onChange, onBlur, name, label, control, error }, ref) => {
   const fieldValue = useWatch({ name, control });
-  console.log("value is: ", fieldValue);
 
   return (
     <MainContainer>

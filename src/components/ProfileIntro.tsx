@@ -80,13 +80,11 @@ const Location = styled.span`
 
 const ProfileIntro = () => {
   const data = useSelector((state: any) => {
-    console.log("state is: ", state);
     return {
       user: state.user.user,
     };
   }, shallowEqual);
 
-  console.log("user is ", data.user);
   return (
     <MainContainer>
       <CoverImage src="https://i.pinimg.com/originals/d9/11/96/d91196b3dc2628506dfca2e92ccbf22e.jpg" />
@@ -94,13 +92,13 @@ const ProfileIntro = () => {
       <Introduction>
         <TopRow>
           <Name>{data.user.displayName}</Name>
-          <Company>
+          {/* <Company>
             <CompanyLogo src="https://media-exp1.licdn.com/dms/image/C4E0BAQG05VHCuyRKZg/company-logo_100_100/0/1600685678299?e=1648684800&v=beta&t=0pPWONi4CS0IFzcOMO3KLZ42xSQlro9z-C7VxFs77pU" />
             Yellow Class
-          </Company>
+          </Company> */}
         </TopRow>
-        <Designation>SDE 3 at Yellow Class</Designation>
-        <Location>Pune, Maharashtra, Karnataka</Location>
+        {/* <Designation>SDE 3 at Yellow Class</Designation>
+        <Location>Pune, Maharashtra, Karnataka</Location> */}
       </Introduction>
     </MainContainer>
   );

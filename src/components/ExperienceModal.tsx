@@ -7,7 +7,6 @@ import AnimatedInputField, {
   ErrorMessage,
   InputLabel,
 } from "./AnimatedInputField";
-// import { AnimatedInputField } from "./InputField";
 
 const NAME_REGEX = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/;
 
@@ -23,7 +22,7 @@ const ModalContainer = styled.div`
   flex-direction: column;
   box-sizing: border-box;
   top: 24px;
-  width: 800px;
+  width: 744px;
   background-color: white;
   border-radius: 10px;
   padding: 16px 24px;
@@ -32,6 +31,37 @@ const ModalContainer = styled.div`
 const Block = styled.div`
   display: flex;
   flex-direction: column;
+  margin: 20px 0;
+`;
+
+const CustomSelect = styled.select`
+  width: 332px;
+  height: 32px;
+  border-radius: 5px;
+  padding: 0 5px;
+`;
+
+const CustomOption = styled.option`
+  font-size: 14px;
+`;
+
+const CustomTextArea = styled.textarea`
+  padding: 5px 10px;
+  font-size: 14px;
+  font-weight: 400;
+  border-radius: 5px;
+`;
+
+const SubmitButton = styled.button`
+  display: flex;
+  background-color: #0a66c2;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  outline: none;
+  border-radius: 1000px;
+  font-size: 14px;
+  margin-top: 20px;
 `;
 
 interface ExperienceModalProps {
@@ -52,20 +82,20 @@ const Select = React.forwardRef<
   >
 >(({ onChange, onBlur, dropdownData, name, disabled }, ref) => (
   <>
-    <select
+    <CustomSelect
       ref={ref}
       name={name}
       onChange={onChange}
       onBlur={onBlur}
       disabled={disabled}
     >
-      <option value="" selected disabled hidden>
+      <CustomOption value="" selected disabled hidden>
         Select an Option
-      </option>
+      </CustomOption>
       {dropdownData.map((data: any, index: any) => (
-        <option value={data}>{data}</option>
+        <CustomOption value={data}>{data}</CustomOption>
       ))}
-    </select>
+    </CustomSelect>
   </>
 ));
 
@@ -73,21 +103,11 @@ const JobDescription = React.forwardRef<
   HTMLTextAreaElement,
   { label: string } & ReturnType<UseFormRegister<IFormValues>>
 >(({ onChange, onBlur, name, label }, ref) => (
-  <>
+  <div style={{ display: "flex", flexDirection: "column" }}>
     <InputLabel>{label}</InputLabel>
-    <textarea name={name} ref={ref} onChange={onChange} onBlur={onBlur} />
-  </>
+    <CustomTextArea name={name} ref={ref} onChange={onChange} onBlur={onBlur} />
+  </div>
 ));
-
-// const Input = React.forwardRef<
-//   HTMLInputElement,
-//   { label: string } & ReturnType<UseFormRegister<IFormValues>>
-// >(({ onChange, onBlur, name, label }, ref) => (
-//   <>
-//     <label>{label}</label>
-//     <input name={name} ref={ref} onChange={onChange} onBlur={onBlur} />
-//   </>
-// ));
 
 const ExperienceModal: React.FC<ExperienceModalProps> = ({
   deactivateModal,
@@ -107,7 +127,11 @@ const ExperienceModal: React.FC<ExperienceModalProps> = ({
     reValidateMode: "onBlur",
   });
 
-  console.log("error is: ", errors);
+  const submitHandler = (formData: any) => {
+    submitFormHandler(formData);
+    reset();
+  };
+
   const watchFields = watch([
     "endDateMonth",
     "endDateYear",
@@ -116,14 +140,7 @@ const ExperienceModal: React.FC<ExperienceModalProps> = ({
     "isCurrentJob",
   ]);
 
-  console.log("disabled", watchFields[4]);
-
   useEffect(() => {
-    console.log("watch fields are: ", watchFields);
-    // console.log(
-    //   "get field are: ",
-    //   );
-    // let watchFields = getValues(["startDateMonth", "startDateYear"]);
     if (
       watchFields[0]?.length &&
       watchFields[1]?.length &&
@@ -134,9 +151,8 @@ const ExperienceModal: React.FC<ExperienceModalProps> = ({
         watchFields[3],
         months.indexOf(watchFields[2])
       );
-      const endDate = new Date(watchFields[1], months.indexOf(watchFields[0]));
 
-      console.log("start date ==>", startDate, endDate);
+      const endDate = new Date(watchFields[1], months.indexOf(watchFields[0]));
 
       if (endDate.getTime() < startDate.getTime()) {
         setError("endDateMonth", {
@@ -162,16 +178,19 @@ const ExperienceModal: React.FC<ExperienceModalProps> = ({
         <Title>Add Experience</Title>
         <form
           style={{ boxSizing: "border-box" }}
-          onSubmit={handleSubmit(submitFormHandler)}
+          onSubmit={handleSubmit(submitHandler)}
         >
           <AnimatedInputField
-            label="Job title"
+            label="Job title*"
             error={errors["jobTitle"]?.message}
             control={control}
-            {...register("jobTitle", { required: "Job title is required!" })}
+            {...register("jobTitle", {
+              required: "Job title is required!",
+              pattern: NAME_REGEX,
+            })}
           />
           <AnimatedInputField
-            label="Company name"
+            label="Company name*"
             error={errors["companyName"]?.message}
             control={control}
             {...register("companyName", {
@@ -179,7 +198,7 @@ const ExperienceModal: React.FC<ExperienceModalProps> = ({
             })}
           />
           <AnimatedInputField
-            label="Location"
+            label="Location*"
             error={errors["location"]?.message}
             control={control}
             {...register("location", { required: "Location is required!" })}
@@ -190,7 +209,7 @@ const ExperienceModal: React.FC<ExperienceModalProps> = ({
           </div>
           <Block>
             <InputLabel>Start date*</InputLabel>
-            <div>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
               <Select
                 dropdownData={months}
                 {...register("startDateMonth", {
@@ -207,7 +226,7 @@ const ExperienceModal: React.FC<ExperienceModalProps> = ({
           </Block>
           <Block>
             <InputLabel>End date*</InputLabel>
-            <div>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
               <Select
                 dropdownData={months}
                 disabled={watchFields[4]}
@@ -223,25 +242,22 @@ const ExperienceModal: React.FC<ExperienceModalProps> = ({
                 })}
               />
             </div>
+            <div>
+              {(errors.startDateMonth?.type ||
+                errors.startDateYear?.type ||
+                errors.endDateMonth?.type ||
+                errors.endDateYear?.type) && (
+                <ErrorMessage>
+                  {errors.endDateMonth?.type === "manual"
+                    ? errors.endDateMonth?.message
+                    : "Start and end dates are required"}
+                </ErrorMessage>
+              )}
+            </div>
           </Block>
-          <div>
-            {(errors.startDateMonth?.type ||
-              errors.startDateYear?.type ||
-              errors.endDateMonth?.type ||
-              errors.endDateYear?.type) && (
-              <ErrorMessage>
-                {errors.endDateMonth?.type === "manual"
-                  ? errors.endDateMonth?.message
-                  : "Start and end dates are required"}
-              </ErrorMessage>
-            )}
-          </div>
           <JobDescription label="Description" {...register("jobDescription")} />
-          <button type="submit">submit</button>
+          <SubmitButton type="submit">submit</SubmitButton>
         </form>
-        <footer className="modal-footer">
-          {/* <button onClick={deactivateModal}>deactivate modal</button> */}
-        </footer>
       </ModalContainer>
     </AriaModal>
   );

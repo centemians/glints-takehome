@@ -10,7 +10,6 @@ const initialState: TInitialState = {
 const reducer = (state = initialState, action: any) => {
   switch (action.type) {
     case "ADD_TODO":
-      console.log("this got triggered!");
       return (state = {
         ...state,
         todoItem: action.payload.content,

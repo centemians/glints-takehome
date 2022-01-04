@@ -15,7 +15,7 @@ const MainContainer = styled.div`
   align-items: center;
 `;
 
-const FacebookContainer = styled.div`
+const Portal = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -67,7 +67,6 @@ const Login = () => {
         return auth
           .signInWithPopup(provider)
           .then((result) => {
-            console.log("result is: ", result);
             dispatch(updateUser(result.user));
           })
           .catch((error) => alert(error.message));
@@ -91,7 +90,6 @@ const Login = () => {
   React.useEffect(() => {
     (async () => {
       const result: any = await getDataFromIndexedDb();
-      console.log("result is:       ===", result);
       if (result && result.value) {
         dispatch(updateUser(result.value));
       }
@@ -100,15 +98,9 @@ const Login = () => {
 
   return (
     <MainContainer>
-      <FacebookContainer>
-        <FacebookLogo
-          src="https://static.xx.fbcdn.net/rsrc.php/y8/r/dF5SId3UHWd.svg"
-          alt="Facebook"
-        />
-        <Text>
-          Facebook helps you connect and share with the people in your life.
-        </Text>
-      </FacebookContainer>
+      <Portal>
+        <Text>Welcome to Glints Experience Portal.</Text>
+      </Portal>
       <SignIn type="submit" onClick={signIn}>
         Sign In
       </SignIn>

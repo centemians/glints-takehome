@@ -61,7 +61,7 @@ const ExperienceInfo = ({ experienceData }: any) => {
   } = experienceData;
   return (
     <MainContainer>
-      <CompanyLogo src="https://media-exp1.licdn.com/dms/image/C4E0BAQG05VHCuyRKZg/company-logo_100_100/0/1600685678299?e=1648684800&v=beta&t=0pPWONi4CS0IFzcOMO3KLZ42xSQlro9z-C7VxFs77pU" />
+      <CompanyLogo src="https://www.pngfind.com/pngs/m/665-6659827_enterprise-comments-default-company-logo-png-transparent-png.png" />
       <CompanyInformation>
         <Designation>{jobTitle}</Designation>
         <CompanyName>{companyName}</CompanyName>

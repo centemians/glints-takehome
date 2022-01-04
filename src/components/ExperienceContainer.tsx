@@ -65,7 +65,6 @@ const ExperienceContainer = () => {
   const dispatch = useDispatch();
 
   const data = useSelector((state: any) => {
-    console.log("state is: ", state);
     return {
       todoItem: state.app.todoItem,
       status: state.app.status,
@@ -76,20 +75,11 @@ const ExperienceContainer = () => {
 
   useEffect(() => {
     if (data?.allTodos?.length) {
-      console.log("data ==========>>>>", data.allTodos);
       let allData = data.allTodos.filter((item: any) => {
-        console.log("item ===", item, item !== null && item !== undefined);
         return item !== null && item !== undefined;
       });
-      console.log("all data is: ", allData);
 
       allData = allData.sort((item1: any, item2: any) => {
-        console.log(
-          "item 1",
-          item1,
-          new Date(item1?.startDate).getTime() >
-            new Date(item2?.startDate).getTime()
-        );
         if (
           new Date(item1?.startDate).getTime() >
           new Date(item2?.startDate).getTime()
@@ -104,7 +94,6 @@ const ExperienceContainer = () => {
         return 0;
       });
       setExperiences(allData);
-      console.log("data is: ===========>>>", allData);
     }
   }, [data]);
 
@@ -118,11 +107,7 @@ const ExperienceContainer = () => {
         console.log("==>>", exps);
         dispatch(syncData(exps));
       });
-    console.log("data is ====>>>", data);
-    // return () => unsubscribe();
   }, []);
-
-  console.log("experience is: ", experiences);
 
   const { register, control, handleSubmit, reset } = useForm({
     reValidateMode: "onBlur",
@@ -130,23 +115,19 @@ const ExperienceContainer = () => {
 
   const editButtonClickHandler = (e: any) => {
     e.preventDefault();
-    console.log("hi");
   };
 
   const addExperienceButtonClickHandler = (e: any) => {
     e.preventDefault();
     setIsModalActive(true);
-    console.log("hi");
   };
 
   const deactivateModal = () => {
-    // setState({ modalActive: false });
     setIsModalActive(false);
   };
 
   const submitFormHandler = (formData: any) => {
-    // reset();
-    console.log("data is: ", formData);
+    reset();
     const newData = {
       ...formData,
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
@@ -158,15 +139,6 @@ const ExperienceContainer = () => {
     };
 
     dispatch(addTodoOffline(newData));
-    // db.collection("experience").add({
-    //   ...data,
-    //   timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-    //   startDate: new Date(
-    //     data.startDateYear,
-    //     months.indexOf(data.startDateYear)
-    //   ),
-    //   userId: "123",
-    // });
   };
 
   const modal = isModalActive ? (
@@ -184,7 +156,7 @@ const ExperienceContainer = () => {
         <Title>Experience</Title>
         <div>
           <Button src={AddIcon} onClick={addExperienceButtonClickHandler} />
-          <Button src={editIcon} onClick={editButtonClickHandler} />
+          {/* <Button src={editIcon} onClick={editButtonClickHandler} /> */}
         </div>
       </TopRow>
       {experiences &&
